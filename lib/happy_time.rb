@@ -7,10 +7,7 @@ require "happy_time/time_formatter"
 require "happy_time/validators/time_is_validator"
 require "happy_time/active_support/active_support_ext"
 require "happy_time/helpers/view_helpers"
-
-if defined?(RSpec)
-  require 'happy_time/matchers/time_matchers'
-end
+require 'happy_time/matchers/rspec_integration'
 
 module HappyTime
   module Rails
