@@ -1,0 +1,1 @@
+Time.zone = "UTC" unless Time.zone.present?

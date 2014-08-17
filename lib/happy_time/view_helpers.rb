@@ -1,7 +1,7 @@
 module HappyTime
   module ViewHelpers
 
-    def js_timezones(selected)
+    def js_timezones(selected = nil)
       prev_offsets = []
       html = ""
       time_zones = ActiveSupport::TimeZone.us_zones.reverse
@@ -18,8 +18,8 @@ module HappyTime
       end
 
       html << "<option disabled='disabled'>--------------</option>"
-      ActiveSupport::TimeZone.all.each do |zone|
-        next if prev_offsets.include?(zone.name)
+      ActiveSupport::TimeZone.all.reverse.each do |zone|
+        next if prev_offsets.include?(zone.utc_offset)
         html << "<option value='#{zone.name}'
                   data-abbreviation='#{zone.now.zone}'
                   data-offset='#{zone.tzinfo.period_for_utc(Time.now).utc_total_offset}'
