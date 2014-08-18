@@ -49,7 +49,7 @@ module HappyTime
       if opts[:html]
         time_str = <<-HTML
         <span data-moment-format='#{to_moment(format)}'
-              data-moment='#{time.to_i * 1000}'>
+              data-moment='#{time.in_time_zone("UTC").to_i * 1000}'>
                 #{time.strftime(format)}
          </span>
          HTML
