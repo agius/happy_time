@@ -24,7 +24,7 @@ Or install it yourself as:
 * Make sure all your databases are set to UTC.
 * Make sure `Time.zone = "UTC"` is in an initializer or environment file in your app.
 * If you are using [Chronic](https://github.com/mojombo/chronic), make sure `Chronic.time_class = Time.zone` is in an initializer or environment file in your app.
-* If you aren't using [MomentJS](momentjs.com), you can install it via Bower, or the [momentjs-rails](https://github.com/derekprior/momentjs-rails) gem.
+* If you aren't using [MomentJS](http://momentjs.com), you can install it via Bower, or the [momentjs-rails](https://github.com/derekprior/momentjs-rails) gem.
 
 ## Usage
 
