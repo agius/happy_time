@@ -18,6 +18,14 @@ Or install it yourself as:
 
     $ gem install happy_time
 
+**Not required, but a really good idea**
+
+* Make sure all your app's servers are set to UTC.
+* Make sure all your databases are set to UTC.
+* Make sure `Time.zone = "UTC"` is in an initializer or environment file in your app.
+* If you are using [Chronic](https://github.com/mojombo/chronic), make sure `Chronic.time_class = Time.zone` is in an initializer or environment file in your app.
+* If you aren't using [MomentJS](momentjs.com), you can install it via Bower, or the [momentjs-rails](https://github.com/derekprior/momentjs-rails) gem.
+
 ## Usage
 
 HappyTime makes things easier across your app. It's not a replacement for anything, but it just adds bits of functionality here and there. Let's have a look:
