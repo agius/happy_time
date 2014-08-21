@@ -4,9 +4,9 @@ module HappyTime
     @@time_zones_for_js = nil
 
     def format_time(time, format_or_opts = nil, opts = {})
-      _format, _opts = TimeFormatter.fetch_options(format_or_opts, opts)
+      _format, _opts = TimeFormatter::Formatter.fetch_options(format_or_opts, opts)
       _opts[:html] = true if _opts[:html].nil?
-      time_str = TimeFormatter.format(time, _format, _opts)
+      time_str = HappyTime.format(time, _format, _opts)
       time_str.html_safe
     end
 
