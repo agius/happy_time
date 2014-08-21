@@ -14,7 +14,6 @@ module HappyTime
       hour_minute:      '%l:%M%P',
       weekday:          '%a',
       short:            :short_format,
-      ago:              :ago_format,
       default:          '%b %-d, %Y'
     }.with_indifferent_access
 

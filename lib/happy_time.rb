@@ -32,6 +32,9 @@ module HappyTime
 
   def self.reset!
     @configuration = Configuration.new
+    @names = nil
+    @abbreviations = nil
+    @zones = nil
     HappyTime::TimeFormatter::Momentizer.reset!
   end
 
@@ -40,11 +43,18 @@ module HappyTime
   end
 
   def self.zone_names
-    ActiveSupport::TimeZone::MAPPING.keys
+    return @names if @names.present?
+    @names = ActiveSupport::TimeZone::MAPPING.keys
   end
 
-  def self.zone
-    (ActiveSupport::TimeZone.us_zones + ActiveSupport::TimeZone.all).uniq.reverse
+  def self.abbreviations
+    return @abbreviations if @abbreviations.present?
+    @abbreviations = zones.collect{|zone| zone.now.zone }
+  end
+
+  def self.zones
+    return @zones if @zones.present?
+    @zones = (ActiveSupport::TimeZone.us_zones + ActiveSupport::TimeZone.all.reverse).uniq
   end
 
 end

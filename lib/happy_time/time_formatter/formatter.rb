@@ -78,10 +78,6 @@ module HappyTime
             configuration.formats[:month_day_year]
           end
         end
-
-        def ago_format(time)
-          time_ago_in_words(time)
-        end
       end # end class << self
     end  # end Formatter
   end

@@ -23,6 +23,7 @@ Or install it yourself as:
 * Make sure all your app's servers are set to UTC.
 * Make sure all your databases are set to UTC.
 * Make sure `Time.zone = "UTC"` is in an initializer or environment file in your app.
+* Remove any and all `Time.method` from your app and specs. Only ever use `Time.zone.method`
 * If you are using [Chronic](https://github.com/mojombo/chronic), make sure `Chronic.time_class = Time.zone` is in an initializer or environment file in your app.
 * If you aren't using [MomentJS](http://momentjs.com), you can install it via Bower, or the [momentjs-rails](https://github.com/derekprior/momentjs-rails) gem.
 
@@ -30,11 +31,19 @@ Or install it yourself as:
 
 HappyTime makes things easier across your app. It's not a replacement for anything, but it just adds bits of functionality here and there. Let's have a look:
 
-### Time Zone Names
+### Quick Access
 
-    ActiveSupport::TimeZone.names
+    HappyTime.zone_names
 
-Gives you a quick and easy list of all the named time zones that ActiveSupport works with.
+A quick and easy list of all the named time zones that ActiveSupport works with.
+
+    HappyTime.abbreviations
+
+A list of all time zone abbreviations (EST/PDT/etc). Zones will use "ST" if they are currently on standard time, or "DT" if they are currently in Daylight Savings Time.
+
+    HappyTime.zones
+
+An array of all time zones that ActiveSupport uses, via the TZInfoProxy objects that it produces. US Zones first, followed by all other zones.
 
 ### Validations
 
@@ -66,6 +75,36 @@ This will give you a nice select box for time zones.
 * Each `<option>` tag includes `data-abbreviation` and `data-offset`, which are useful for your app's client-side functionality.
 
 ### Formatting
+    
+    Time.now.happy
+    "Nov 26, 1983"
+
+    Time.now.happy(:js)
+    "1983-11-26"
+
+    Time.now.to_html
+    <span class="momentjs"
+          data-moment-format="MMM D YYYY"
+          data-moment="438710400">
+      Nov 26, 1983
+    </span>
+
+    Time.now.to_html(:short)
+    <span class="momentjs"
+          data-moment-format="h:mma"
+          data-moment="438710400">
+      4:00pm
+    </span>
+
+    Date.today.happy
+    "Nov 26, 1983"
+
+    Date.today.to_html(:js)
+    <span class="momentjs"
+          data-moment-format="YYYY-MM-DD"
+          data-moment="438710400">
+      1983-11-26
+    </span>
 
     /views/app_events/_app_event.html.erb
     <%= format_time(Time.now) %> 
@@ -75,7 +114,16 @@ This will give you a nice select box for time zones.
     </span>
 
     <%= format_time(Time.now, 'short') %> 
-    <span data-moment-format="h:mma"
+    <span class="momentjs"
+          data-moment-format="h:mma"
+          data-moment="438710400">
+      4:00pm
+    </span>
+
+    <%= format_time(Time.now, 'short', html: {class: 'app-time', data: { module: 'moment' } } ) %> 
+    <span class="app-time"
+          data-module="moment"
+          data-moment-format="h:mma"
           data-moment="438710400">
       4:00pm
     </span>
@@ -101,7 +149,35 @@ The following formats are supported:
                           Nov 26 if the time is more than one week ago
                           Nov 26, 1982 if the time is before the beginning of the current year
 
-You can also use this functionality server-side via `TimeFormatter.format(Time.zone.now, 'short')`
+You can also use call directly via `HappyTime.format(Time.zone.now, 'short')`
+
+### Configuration
+
+    /config/initializers/happy_time.rb
+    HappyTime.configure do |config|
+      config.formats[:iso] = '%FT%T%:z'
+      config.tag = 'time'
+      config.html_options = {
+        class: 'app-time',
+        data: {
+          module: 'moment'
+        }
+      }
+      config.formats[:is_future] = Proc.new{|t| t < Time.zone.now ? 'past' : 'future' }
+    end
+
+    Time.zone.now.to_html(:iso)
+    <time class="app-time"
+          data-module="moment"
+          data-moment-format="YYYY-MM-DDTHH:mm:ssZZ"
+          data-moment="438710400">
+      4:00pm
+    </time>
+
+    (Time.zone.now - 3).happy(:is_future)
+    "past"
+
+By passing a block to HappyTime.configure, you can add new formats, choose which HTML tag to use when rendering times, and set default html options. Anything you set here will override the defaults, so you can set `formats[:short]` to override the existing format, or set `formats[:default]` to change the default output format. In addition to passing normal Time#strftime compatible strings, you can also pass a `Proc` which receives one argument, the time being rendered.
 
 ### jQuery
 

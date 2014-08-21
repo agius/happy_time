@@ -101,7 +101,7 @@ module HappyTime
         
         html = js_span("MMM D, YYYY", (now - 1.years).to_i * 1000, "Nov 25, 2009")
         expect(formatter.format(now - 1.years, :short, html: true)).to eq(html)
-      end   
+      end
 
     end
 
